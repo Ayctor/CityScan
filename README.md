@@ -28,22 +28,17 @@ Returns:
 
 ```json
 {
-    "status": 0,
-    "content": {
-        "activation": {
-            "source": "IGN",
-            "lat": 48.8445,
-            "lon": 2.2786,
-            "address": {
-                "id": 74752,
-                "geoloc_id": 69849,
-                "route": "23, rue Sébastien Mercier",
-                "postal_code": "75015",
-                "city": "Paris"
-            },
-            "externalAddressId": "ayctor"
-        }
-    }
+    "source": "IGN",
+    "lat": 48.8445,
+    "lon": 2.2786,
+    "address": {
+        "id": 74752,
+        "geoloc_id": 69849,
+        "route": "23, rue Sébastien Mercier",
+        "postal_code": "75015",
+        "city": "Paris"
+    },
+    "externalAddressId": "ayctor"
 }
 ```
 
@@ -58,19 +53,17 @@ Returns:
 
 ```json
 {
-    "activation": {
-        "source": "IGN",
-        "lat": "48.8445",
-        "lon": "2.2786",
-        "address": {
-            "id": 74728,
-            "geoloc_id": 69849,
-            "route": "28 rue sebastien mercier",
-            "postal_code": "75015",
-            "city": "Paris"
-        },
-        "externalAddressId": null
-    }
+    "source": "IGN",
+    "lat": "48.8445",
+    "lon": "2.2786",
+    "address": {
+        "id": 74728,
+        "geoloc_id": 69849,
+        "route": "28 rue sebastien mercier",
+        "postal_code": "75015",
+        "city": "Paris"
+    },
+    "externalAddressId": null
 }
 ```
 
