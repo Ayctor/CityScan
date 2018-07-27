@@ -135,6 +135,54 @@ class CityScan
     }
 
     /**
+     * Correct an address by it's road, postal code and city
+     *
+     * @param string $road Number and street name
+     * @param string|int $postal_code Postal code
+     * @param string $city City
+     * @param string $external_id External ID
+     * @return \StdClass Json data on the address
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function correctAddressByRoad($road, $postal_code, $city, $external_id = null)
+    {
+        $params = [
+            'road' => $road,
+            'postalCode' => $postal_code,
+            'city' => $city,
+        ];
+
+        if ($external_id) {
+            $params['externalAddressId'] = $external_id;
+        }
+
+        return $this->request('POST', 'address/activation', $params)->activation;
+    }
+
+    /**
+     * Activate an address by it's road, postal code and city
+     *
+     * @param float $latitude Latitude
+     * @param float $longitude Longitude
+     * @param string $external_id External ID
+     * @return \StdClass Json data on the address
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function correctAddressByGPS($latitude, $longitude, $external_id = null)
+    {
+        $params = [
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+        ];
+
+        if ($external_id) {
+            $params['externalAddressId'] = $external_id;
+        }
+
+        return $this->request('POST', 'address/activation', $params)->activation;
+    }
+
+    /**
      * Desactivate an address
      *
      * @param string|int $id Id of the addresse
@@ -144,7 +192,7 @@ class CityScan
      */
     public function deactivateAddress($id, $isExternal = false)
     {
-        if($isExternal){
+        if ($isExternal) {
             $params = [
                 'externalAddressId' => $id
             ];
