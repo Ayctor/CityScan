@@ -156,7 +156,7 @@ class CityScan
             $params['externalAddressId'] = $external_id;
         }
 
-        return $this->request('POST', 'address/activation', $params)->activation;
+        return $this->request('POST', 'address/correction', $params)->activation;
     }
 
     /**
@@ -179,7 +179,7 @@ class CityScan
             $params['externalAddressId'] = $external_id;
         }
 
-        return $this->request('POST', 'address/activation', $params)->activation;
+        return $this->request('POST', 'address/correction', $params)->activation;
     }
 
     /**
