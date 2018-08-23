@@ -144,7 +144,7 @@ class CityScan
      * @return \StdClass Json data on the address
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function correctAddressByRoad($road, $postal_code, $city, $external_id = null)
+    public function correctAddressByRoad($road, $postal_code, $city, $id, $isExternal = false)
     {
         $params = [
             'road' => $road,
@@ -152,8 +152,14 @@ class CityScan
             'city' => $city,
         ];
 
-        if ($external_id) {
-            $params['externalAddressId'] = $external_id;
+        if ($isExternal) {
+            $params = [
+                'externalAddressId' => $id
+            ];
+        } else {
+            $params = [
+                'addressId' => $id
+            ];
         }
 
         return $this->request('POST', 'address/correction', $params)->activation;
@@ -168,15 +174,21 @@ class CityScan
      * @return \StdClass Json data on the address
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function correctAddressByGPS($latitude, $longitude, $external_id = null)
+    public function correctAddressByGPS($latitude, $longitude, $id, $isExternal = false)
     {
         $params = [
             'latitude' => $latitude,
             'longitude' => $longitude,
         ];
 
-        if ($external_id) {
-            $params['externalAddressId'] = $external_id;
+        if ($isExternal) {
+            $params = [
+                'externalAddressId' => $id
+            ];
+        } else {
+            $params = [
+                'addressId' => $id
+            ];
         }
 
         return $this->request('POST', 'address/correction', $params)->activation;
