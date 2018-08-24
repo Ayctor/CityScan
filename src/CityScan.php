@@ -158,7 +158,7 @@ class CityScan
             ];
         } else {
             $params = [
-                'addressId' => $id
+                'oldAddressId' => $id
             ];
         }
 
@@ -187,7 +187,7 @@ class CityScan
             ];
         } else {
             $params = [
-                'addressId' => $id
+                'oldAddressId' => $id
             ];
         }
 
