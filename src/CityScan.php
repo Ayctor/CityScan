@@ -79,6 +79,10 @@ class CityScan
 
         $json_res = json_decode((string)$response->getBody());
 
+        if(!isset($json_res->status)) {
+            throw new \Exception('No response', 500);
+        }
+        
         if ($json_res->status) {
             throw new \Exception($json_res->message, $json_res->errorCode);
         }
