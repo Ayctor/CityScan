@@ -157,13 +157,9 @@ class CityScan
         ];
 
         if ($isExternal) {
-            $params = [
-                'externalAddressId' => $id
-            ];
+            $params['externalAddressId'] = $id;
         } else {
-            $params = [
-                'oldAddressId' => $id
-            ];
+            $params['oldAddressId'] = $id;
         }
 
         return $this->request('POST', 'address/correction', $params)->activation;
@@ -186,13 +182,9 @@ class CityScan
         ];
 
         if ($isExternal) {
-            $params = [
-                'externalAddressId' => $id
-            ];
+            $params['externalAddressId'] = $id;
         } else {
-            $params = [
-                'oldAddressId' => $id
-            ];
+            $params['oldAddressId'] = $id;
         }
 
         return $this->request('POST', 'address/correction', $params)->activation;
