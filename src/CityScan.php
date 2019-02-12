@@ -52,6 +52,7 @@ class CityScan
         $this->client = new Client([
             'base_uri' => $this->getBaseUrl(),
             'timeout' => 10,
+            'http_errors' => false,
         ]);
     }
 
