@@ -85,7 +85,7 @@ class CityScan
         }
         
         if ($json_res->status) {
-            throw new \Exception($json_res->message, $json_res->errorCode);
+            throw new \Exception($json_res->message, $json_res->error);
         }
 
         return $json_res->content;
