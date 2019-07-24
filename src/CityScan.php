@@ -251,7 +251,7 @@ class CityScan
      */
     public function getActives()
     {
-        return $this->newRequest('GET', 'address/active');
+        return $this->newRequest('GET', 'addresses/active');
     }
 
     /**
@@ -272,7 +272,7 @@ class CityScan
         if (!is_null($end)) {
             $params['query']['end'] = $end;
         }
-        return $this->newRequest('GET', 'address/activated', $params);
+        return $this->newRequest('GET', 'addresses/activated', $params);
     }
 
     /**
@@ -293,7 +293,7 @@ class CityScan
         if (!is_null($end)) {
             $params['query']['end'] = $end;
         }
-        return $this->newRequest('GET', 'address/billed', $params);
+        return $this->newRequest('GET', 'addresses/billed', $params);
     }
 
     /**
@@ -314,7 +314,7 @@ class CityScan
         if (!is_null($end)) {
             $params['query']['end'] = $end;
         }
-        return $this->newRequest('GET', 'address/deactivated', $params);
+        return $this->newRequest('GET', 'addresses/deactivated', $params);
     }
 
     /**
@@ -327,6 +327,6 @@ class CityScan
      */
     public function getAll()
     {
-        return $this->newRequest('GET', 'address/all');
+        return $this->newRequest('GET', 'addresses/all');
     }
 }
