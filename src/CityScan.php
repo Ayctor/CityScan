@@ -53,6 +53,9 @@ class CityScan
             'base_uri' => $this->getBaseUrl(),
             'timeout' => 10,
             'http_errors' => false,
+            'headers' => [
+                'ApiKey' => $this->api_key,
+            ],
         ]);
     }
 
@@ -80,10 +83,36 @@ class CityScan
 
         $json_res = json_decode((string)$response->getBody());
 
-        if(!isset($json_res->status)) {
+        if (!isset($json_res->status)) {
             throw new \Exception('No response', 500);
         }
-        
+
+        if ($json_res->status) {
+            throw new \Exception($json_res->message, $json_res->error);
+        }
+
+        return $json_res->content;
+    }
+
+    /**
+     * @param $method
+     * @param $uri
+     * @param $params
+     * @return \StdClass Json data
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
+     */
+    private function newRequest($method, $uri, $params = [])
+    {
+
+        $response = $this->client->request($method, $uri, $params);
+
+        $json_res = json_decode((string)$response->getBody());
+
+        if (!isset($json_res->status)) {
+            throw new \Exception('No response', 500);
+        }
+
         if ($json_res->status) {
             throw new \Exception($json_res->message, $json_res->error);
         }
@@ -203,15 +232,101 @@ class CityScan
     {
         if ($isExternal) {
             $params = [
-                'externalAddressId' => $id
+                'externalAddressId' => $id,
             ];
         } else {
             $params = [
-                'addressId' => $id
+                'addressId' => $id,
             ];
         }
 
         return $this->request('POST', 'address/deactivation', $params);
     }
 
+    /**
+     * Get all active adresses
+     *
+     * @return \StdClass
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getActives()
+    {
+        return $this->newRequest('GET', 'addresses/active');
+    }
+
+    /**
+     * Get all activated adresses between two dates
+     *
+     * @param string|null $start
+     * @param string|null $end
+     * @return \StdClass
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getActivated($start = null, $end = null)
+    {
+        $params = [];
+        $params['query'] = [];
+        if (!is_null($start)) {
+            $params['query']['start'] = $start;
+        }
+        if (!is_null($end)) {
+            $params['query']['end'] = $end;
+        }
+        return $this->newRequest('GET', 'addresses/activated', $params);
+    }
+
+    /**
+     * Get all billed adresses between two dates
+     *
+     * @param string|null $start
+     * @param string|null $end
+     * @return \StdClass
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getBilled($start = null, $end = null)
+    {
+        $params = [];
+        $params['query'] = [];
+        if (!is_null($start)) {
+            $params['query']['start'] = $start;
+        }
+        if (!is_null($end)) {
+            $params['query']['end'] = $end;
+        }
+        return $this->newRequest('GET', 'addresses/billed', $params);
+    }
+
+    /**
+     * Get all deactivated adresses between two dates
+     *
+     * @param string|null $start
+     * @param string|null $end
+     * @return \StdClass
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getDeactivated($start = null, $end = null)
+    {
+        $params = [];
+        $params['query'] = [];
+        if (!is_null($start)) {
+            $params['query']['start'] = $start;
+        }
+        if (!is_null($end)) {
+            $params['query']['end'] = $end;
+        }
+        return $this->newRequest('GET', 'addresses/deactivated', $params);
+    }
+
+    /**
+     * Get all adresses
+     *
+     * @param string|null $start
+     * @param string|null $end
+     * @return \StdClass
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getAll()
+    {
+        return $this->newRequest('GET', 'addresses/all');
+    }
 }
