@@ -82,3 +82,166 @@ Returns:
     "deactivation": "true"
 }
 ```
+
+## Get adresses
+
+### Get active adresses
+
+```php
+function getActives()
+
+$adresses = $cs->getActives();
+```
+Returns:
+```json
+{
+  "status": 0,
+  "content": {
+    "count": 12,
+    "addresses": [
+      {
+        "id": 68401,
+        "route": "73 rue lecourbe",
+        "postalCode": "75015",
+        "city": "Paris",
+        "externalAddressId": null,
+        "active": true,
+        "activation": "2019-01-02 09:43:48",
+        "deactivation": null,
+        "lat": 48.843331,
+        "lon": 7.230364
+      }, ...
+    ]
+  }
+}
+```
+
+### Get all adresses
+
+```php
+function getAll()
+
+$adresses = $cs->getAll();
+```
+Returns:
+```json
+{
+  "status": 0,
+  "content": {
+    "count": 12,
+    "addresses": [
+      {
+        "id": 68401,
+        "route": "73 rue lecourbe",
+        "postalCode": "75015",
+        "city": "Paris",
+        "externalAddressId": null,
+        "active": true,
+        "activation": "2019-01-02 09:43:48",
+        "deactivation": null,
+        "lat": 48.843331,
+        "lon": 7.230364
+      }, ...
+    ]
+  }
+}
+```
+
+### Get activated
+
+Get the adresses activated between two dates. If null is sent for one of the dates, no limit is applied.
+
+```php
+function getActivated($start = null, $end = null)
+
+$adresses = $cs->getActivated('2018-01-01','2018-02-01');
+```
+Returns:
+```json
+{
+  "status": 0,
+  "content": {
+    "count": 12,
+    "addresses": [
+      {
+        "id": 68401,
+        "route": "73 rue lecourbe",
+        "postalCode": "75015",
+        "city": "Paris",
+        "externalAddressId": null,
+        "active": true,
+        "activation": "2019-01-02 09:43:48",
+        "deactivation": null,
+        "lat": 48.843331,
+        "lon": 7.230364
+      }, ...
+    ]
+  }
+}
+```
+
+### Get billed
+
+Get the adresses billed between two dates. If null is sent for one of the dates, no limit is applied.
+
+```php
+function getActivated($start = null, $end = null)
+
+$adresses = $cs->getActivated('2018-01-01','2018-02-01');
+```
+Returns:
+```json
+{
+  "status": 0,
+  "content": {
+    "count": 12,
+    "addresses": [
+      {
+        "id": 68401,
+        "route": "73 rue lecourbe",
+        "postalCode": "75015",
+        "city": "Paris",
+        "externalAddressId": null,
+        "active": true,
+        "activation": "2019-01-02 09:43:48",
+        "deactivation": null,
+        "lat": 48.843331,
+        "lon": 7.230364
+      }, ...
+    ]
+  }
+}
+```
+
+### Get deactivated
+
+Get the adresses deactivated between two dates. If null is sent for one of the dates, no limit is applied.
+
+```php
+function getDeactivated($start = null, $end = null)
+
+$adresses = $cs->getDeactivated('2018-01-01','2018-02-01');
+```
+Returns:
+```json
+{
+  "status": 0,
+  "content": {
+    "count": 12,
+    "addresses": [
+      {
+        "id": 68401,
+        "route": "73 rue lecourbe",
+        "postalCode": "75015",
+        "city": "Paris",
+        "externalAddressId": null,
+        "active": true,
+        "activation": "2019-01-02 09:43:48",
+        "deactivation": null,
+        "lat": 48.843331,
+        "lon": 7.230364
+      }, ...
+    ]
+  }
+}
+```
