@@ -83,6 +83,54 @@ Returns:
 }
 ```
 
+## Reactivate addresses
+
+```php
+function reactivateAddresses($ids, $isExternal = false){}
+
+$cs->reactivateAddresses(['ayctor', 'digibox'], true);
+
+$cs->reactivateAddresses(['ayctor', 'digibox'], true);
+
+$cs->reactivateAddresses([74728, 74729]);
+```
+Returns:
+```json
+{
+  "status": 0,
+  "content": {
+    "addresses": [
+      {
+          "id": 74728,
+          "route": "23, rue Sébastien Mericer",
+          "postalCode": "75015",
+          "city": "Paris",
+          "externalAddressId": "ayctor",
+          "active": true,
+          "activation": "2020-01-03 18:42:47",
+          "deactivation": null,
+          "lastSeen": null,
+          "lat": 48.8445, 
+          "lon": 2.2786
+      },
+      {
+          "id": 74729,
+          "route": "23, rue Sébastien Mericer",
+          "postalCode": "75015",
+          "city": "Paris",
+          "externalAddressId": "digibox",
+          "active": true,
+          "activation": "2020-01-03 18:42:47",
+          "deactivation": null,
+          "lastSeen": null,
+          "lat": 48.8445, 
+          "lon": 2.2786
+      }
+    ]
+  }
+}
+```
+
 ## Get adresses
 
 ### Get active adresses
