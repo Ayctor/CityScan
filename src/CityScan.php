@@ -244,7 +244,30 @@ class CityScan
     }
 
     /**
-     * Get all active adresses
+     * Reactivate addresses
+     *
+     * @param array $ids
+     * @param bool $isExternal Define if the address id is external or not
+     * @return \StdClass
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function reactivateAddresses($ids, $isExternal = false)
+    {
+        if ($isExternal) {
+            $params = [
+                'extAddressIds' => $ids,
+            ];
+        } else {
+            $params = [
+                'addressIds' => $ids,
+            ];
+        }
+
+        return $this->request('POST', 'addresses/reactivate', $params);
+    }
+
+    /**
+     * Get all active addresses
      *
      * @return \StdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -255,7 +278,7 @@ class CityScan
     }
 
     /**
-     * Get all activated adresses between two dates
+     * Get all activated addresses between two dates
      *
      * @param string|null $start
      * @param string|null $end
@@ -276,7 +299,7 @@ class CityScan
     }
 
     /**
-     * Get all billed adresses between two dates
+     * Get all billed addresses between two dates
      *
      * @param string|null $start
      * @param string|null $end
@@ -297,7 +320,7 @@ class CityScan
     }
 
     /**
-     * Get all deactivated adresses between two dates
+     * Get all deactivated addresses between two dates
      *
      * @param string|null $start
      * @param string|null $end
@@ -318,7 +341,7 @@ class CityScan
     }
 
     /**
-     * Get all adresses
+     * Get all addresses
      *
      * @param string|null $start
      * @param string|null $end
