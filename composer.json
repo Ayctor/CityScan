@@ -1,6 +1,6 @@
 {
     "name": "ayctor/cityscan",
-    "version": "0.1.7",
+    "version": "0.2.0",
     "type": "library",
     "license": "MIT",
     "minimum-stability": "stable",
@@ -8,6 +8,10 @@
         {
             "name": "Erwan Guillon",
             "email": "erwan@ayctor.com"
+        },
+        {
+            "name": "Damien Couteillou",
+            "email": "damien@ayctor.com"
         }
     ],
     "support": {

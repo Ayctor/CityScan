@@ -343,8 +343,6 @@ class CityScan
     /**
      * Get all addresses
      *
-     * @param string|null $start
-     * @param string|null $end
      * @return \StdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
