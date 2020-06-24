@@ -10,26 +10,15 @@ use GuzzleHttp\Client;
  */
 class CityScan
 {
+    private string $api_key;
 
-    /**
-     * @var string Api key
-     */
-    private $api_key;
+    private string $client_key;
 
-    /**
-     * @var string Environment
-     */
-    private $environment;
+    private string $environment;
 
-    /**
-     * @var \GuzzleHttp\Client Api client
-     */
-    private $client;
+    private \GuzzleHttp\Client $client;
 
-    /**
-     * @var array Base URLs for each environments
-     */
-    private static $base_urls = [
+    private static array $base_urls = [
         'preprod' => 'https://preprod.cityscan.fr/api/',
         'prod' => 'https://www.cityscan.fr/api/',
     ];
@@ -40,9 +29,10 @@ class CityScan
      * @param string $environment Destination environment : prod or preprod
      * @throws \Exception
      */
-    public function __construct($api_key, $environment = 'prod')
+    public function __construct(string $api_key, string $client_key = '', string $environment = 'prod')
     {
         $this->api_key = $api_key;
+        $this->client_key = $client_key;
         $this->environment = $environment;
 
         if (!array_key_exists($environment, static::$base_urls)) {
@@ -59,10 +49,7 @@ class CityScan
         ]);
     }
 
-    /**
-     * @return mixed
-     */
-    private function getBaseUrl()
+    private function getBaseUrl(): string
     {
         return static::$base_urls[$this->environment];
     }
@@ -71,15 +58,23 @@ class CityScan
      * @param $method
      * @param $uri
      * @param $params
-     * @return \StdClass Json data
+     * @return \stdClass Json data
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Exception
      */
-    private function request($method, $uri, $params)
+    private function request($method, $uri, $params): \stdClass
     {
-        $params_with_auth = array_merge($params, ['apiKey' => $this->api_key]);
+        $body_params = ['json' => array_merge($params, ['apiKey' => $this->api_key])];
 
-        $response = $this->client->request($method, $uri, ['json' => $params_with_auth]);
+        // If it's a report, we extend the timeout to 2 minutes
+        if ($uri == 'widget/report') {
+            $body_params = [
+                'json' => array_merge($params, ['clientKey' => $this->client_key]),
+                'timeout' => 120,
+            ];
+        }
+
+        $response = $this->client->request($method, $uri, $body_params);
 
         $json_res = json_decode((string)$response->getBody());
 
@@ -98,11 +93,11 @@ class CityScan
      * @param $method
      * @param $uri
      * @param $params
-     * @return \StdClass Json data
+     * @return \stdClass Json data
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Exception
      */
-    private function newRequest($method, $uri, $params = [])
+    private function newRequest($method, $uri, $params = []): \stdClass
     {
 
         $response = $this->client->request($method, $uri, $params);
@@ -127,10 +122,10 @@ class CityScan
      * @param string|int $postal_code Postal code
      * @param string $city City
      * @param string $external_id External ID
-     * @return \StdClass Json data on the address
+     * @return \stdClass Json data on the address
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function activateAddressByRoad($road, $postal_code, $city, $external_id = null)
+    public function activateAddressByRoad($road, $postal_code, $city, $external_id = null): \stdClass
     {
         $params = [
             'road' => $road,
@@ -151,10 +146,10 @@ class CityScan
      * @param float $latitude Latitude
      * @param float $longitude Longitude
      * @param string $external_id External ID
-     * @return \StdClass Json data on the address
+     * @return \stdClass Json data on the address
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function activateAddressByGPS($latitude, $longitude, $external_id = null)
+    public function activateAddressByGPS($latitude, $longitude, $external_id = null): \stdClass
     {
         $params = [
             'latitude' => $latitude,
@@ -175,10 +170,10 @@ class CityScan
      * @param string|int $postal_code Postal code
      * @param string $city City
      * @param string $external_id External ID
-     * @return \StdClass Json data on the address
+     * @return \stdClass Json data on the address
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function correctAddressByRoad($road, $postal_code, $city, $id, $isExternal = false)
+    public function correctAddressByRoad($road, $postal_code, $city, $id, $isExternal = false): \stdClass
     {
         $params = [
             'road' => $road,
@@ -201,10 +196,10 @@ class CityScan
      * @param float $latitude Latitude
      * @param float $longitude Longitude
      * @param string $external_id External ID
-     * @return \StdClass Json data on the address
+     * @return \stdClass Json data on the address
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function correctAddressByGPS($latitude, $longitude, $id, $isExternal = false)
+    public function correctAddressByGPS($latitude, $longitude, $id, $isExternal = false): \stdClass
     {
         $params = [
             'latitude' => $latitude,
@@ -221,14 +216,37 @@ class CityScan
     }
 
     /**
+     * Generate a report for an address
+     *
+     * @param string|int $id Id of the addresse
+     * @param bool $isExternal Define if the addresse id is external or not
+     * @return \stdClass
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function report($id, $isExternal = false): \stdClass
+    {
+        if ($isExternal) {
+            $params = [
+                'externalAddressId' => $id,
+            ];
+        } else {
+            $params = [
+                'addressId' => $id,
+            ];
+        }
+
+        return $this->request('POST', 'widget/report', $params);
+    }
+
+    /**
      * Desactivate an address
      *
      * @param string|int $id Id of the addresse
      * @param bool $isExternal Define if the addresse id is external or not
-     * @return \StdClass
+     * @return \stdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function deactivateAddress($id, $isExternal = false)
+    public function deactivateAddress($id, $isExternal = false): \stdClass
     {
         if ($isExternal) {
             $params = [
@@ -248,10 +266,10 @@ class CityScan
      *
      * @param array $ids
      * @param bool $isExternal Define if the address id is external or not
-     * @return \StdClass
+     * @return \stdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function reactivateAddresses($ids, $isExternal = false)
+    public function reactivateAddresses($ids, $isExternal = false): \stdClass
     {
         if ($isExternal) {
             $params = [
@@ -269,10 +287,10 @@ class CityScan
     /**
      * Get all active addresses
      *
-     * @return \StdClass
+     * @return \stdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getActives()
+    public function getActives(): \stdClass
     {
         return $this->newRequest('GET', 'addresses/active');
     }
@@ -282,10 +300,10 @@ class CityScan
      *
      * @param string|null $start
      * @param string|null $end
-     * @return \StdClass
+     * @return \stdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getActivated($start = null, $end = null)
+    public function getActivated($start = null, $end = null): \stdClass
     {
         $params = [];
         $params['query'] = [];
@@ -303,10 +321,10 @@ class CityScan
      *
      * @param string|null $start
      * @param string|null $end
-     * @return \StdClass
+     * @return \stdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getBilled($start = null, $end = null)
+    public function getBilled($start = null, $end = null): \stdClass
     {
         $params = [];
         $params['query'] = [];
@@ -324,10 +342,10 @@ class CityScan
      *
      * @param string|null $start
      * @param string|null $end
-     * @return \StdClass
+     * @return \stdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getDeactivated($start = null, $end = null)
+    public function getDeactivated($start = null, $end = null): \stdClass
     {
         $params = [];
         $params['query'] = [];
@@ -343,10 +361,10 @@ class CityScan
     /**
      * Get all addresses
      *
-     * @return \StdClass
+     * @return \stdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getAll()
+    public function getAll(): \stdClass
     {
         return $this->newRequest('GET', 'addresses/all');
     }

@@ -2,12 +2,20 @@
 
 PHP client for CityScan. Allow you to activate or deactivate addresses.
 
+## Install
+
+```bash
+composer require ayctor/cityscan
+```
+
 ## Instanciate
 
-Instanciate a new CityScan API with API key (required) and an environment (optional), prod by default or preprod. 
+Instanciate a new CityScan API with API key (required), client key (required for report) and an environment (optional), prod by default or preprod. 
+
+Be carefull, the function signature has changed with the client key added after api key.
 
 ```php
-$cs = new \CityScan\CityScan('api_key', 'preprod');
+$cs = new \CityScan\CityScan('api_key', 'client_key', 'preprod');
 ```
 
 ## Errors
@@ -291,5 +299,21 @@ Returns:
       }, ...
     ]
   }
+}
+```
+
+## Get report
+
+```php
+function report($id, $isExternal = false)
+
+$report = $cs->report('ayctor', true);
+
+```
+Returns:
+```json
+{
+    "reportId": "51EA1BE0-6D13-1234-4E78-3A24BAEED2F0",
+    "filename": "Rapport CityScan -  23 rue Sébastien Mercier - 75015 Paris.pdf"
 }
 ```
