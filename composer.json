@@ -1,6 +1,6 @@
 {
     "name": "ayctor/cityscan",
-    "version": "1.0.0",
+    "description": "PHP client for CityScan. Allow you to activate or deactivate addresses.",
     "type": "library",
     "license": "MIT",
     "minimum-stability": "stable",
